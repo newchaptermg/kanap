@@ -76,4 +76,6 @@ function getProductIdFromUrl() {
   
   // Execute the main function on page load
   document.addEventListener('DOMContentLoaded', main);
+
+  // test
   
