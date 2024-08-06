@@ -138,10 +138,110 @@ function getCart() {
     displayCartItems();  // Refresh the cart items display and update total quantity and price
   }
   
+  // Function to validate form fields
+  function validateForm() {
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const email = document.getElementById('email').value.trim();
+  
+    const nameRegex = /^[A-Za-z\s'-]+$/;
+    const addressRegex = /^[A-Za-z0-9\s,'-]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    let valid = true;
+  
+    if (!nameRegex.test(firstName)) {
+      document.getElementById('firstNameErrorMsg').textContent = 'Please enter a valid first name.';
+      valid = false;
+    } else {
+      document.getElementById('firstNameErrorMsg').textContent = '';
+    }
+  
+    if (!nameRegex.test(lastName)) {
+      document.getElementById('lastNameErrorMsg').textContent = 'Please enter a valid last name.';
+      valid = false;
+    } else {
+      document.getElementById('lastNameErrorMsg').textContent = '';
+    }
+  
+    if (!addressRegex.test(address)) {
+      document.getElementById('addressErrorMsg').textContent = 'Please enter a valid address.';
+      valid = false;
+    } else {
+      document.getElementById('addressErrorMsg').textContent = '';
+    }
+  
+    if (!nameRegex.test(city)) {
+      document.getElementById('cityErrorMsg').textContent = 'Please enter a valid city.';
+      valid = false;
+    } else {
+      document.getElementById('cityErrorMsg').textContent = '';
+    }
+  
+    if (!emailRegex.test(email)) {
+      document.getElementById('emailErrorMsg').textContent = 'Please enter a valid email.';
+      valid = false;
+    } else {
+      document.getElementById('emailErrorMsg').textContent = '';
+    }
+  
+    return valid;
+  }
+  
+  // Function to handle form submission
+  function handleFormSubmission(event) {
+    event.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+  
+    const contact = {
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName: document.getElementById('lastName').value.trim(),
+      address: document.getElementById('address').value.trim(),
+      city: document.getElementById('city').value.trim(),
+      email: document.getElementById('email').value.trim()
+    };
+  
+    const products = getCart().map(item => item.id);
+  
+    const order = {
+      contact,
+      products
+    };
+  
+    fetch('http://localhost:3000/api/products/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(order)
+    })
+      .then(response => response.json())
+      .then(data => {
+        window.location.href = `confirmation.html?orderId=${data.orderId}`;
+      })
+      .catch(error => {
+        console.error('Error confirming order:', error);
+      });
+  }
+  
+  // Function to attach the form submission handler
+  function attachFormHandler() {
+    const orderForm = document.querySelector('.cart__order__form');
+    orderForm.addEventListener('submit', handleFormSubmission);
+  }
+  
   // Main function to execute on page load
   function main() {
     displayCartItems();
+    attachFormHandler();
   }
+  
+  // Execute the main function
+  
   
   // Execute the main function on page load
   document.addEventListener('DOMContentLoaded', main);
