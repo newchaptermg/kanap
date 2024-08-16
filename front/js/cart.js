@@ -147,9 +147,11 @@ function getCart() {
     const email = document.getElementById('email').value.trim();
   
     const nameRegex = /^[A-Za-z\s'-]+$/;
-    const addressRegex = /^[A-Za-z0-9\s,'-]+$/;
+    // const addressRegex = /^[A-Za-z0-9\s,'-]+$/;   
+    const addressRegex = /^[0-9]+\s+[A-Za-z0-9\s,'-]+$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
+
+    
     let valid = true;
   
     if (!nameRegex.test(firstName)) {
@@ -202,7 +204,7 @@ function getCart() {
       lastName: document.getElementById('lastName').value.trim(),
       address: document.getElementById('address').value.trim(),
       city: document.getElementById('city').value.trim(),
-      email: document.getElementById('email').value.trim()
+      email: document.getElementById('email').value.trim(),
     };
   
     const products = getCart().map(item => item.id);
@@ -242,7 +244,5 @@ function getCart() {
   
   // Execute the main function
   
-  
-  // Execute the main function on page load
   document.addEventListener('DOMContentLoaded', main);
   
